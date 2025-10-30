@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.sorokin.springcourse.models.Person;
 import ru.sorokin.springcourse.services.BookService;
 import ru.sorokin.springcourse.services.PeopleService;
-//import ru.alishev.springcourse.util.PersonValidator;
+//import ru.sorokin.springcourse.util.PersonValidator;
 
 import javax.validation.Valid;
 
