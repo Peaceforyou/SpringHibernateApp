@@ -9,6 +9,7 @@ import ru.sorokin.springcourse.models.Person;
 import ru.sorokin.springcourse.repositories.BookRepository;
 
 import javax.persistence.EntityManager;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,15 @@ public class BookService {
         Session session = em.unwrap(Session.class);
         session.createQuery("update Book b SET b.owner=:selectedPerson where b.id= :bookId")
                 .setParameter("bookId",id).setParameter("selectedPerson",selectedPerson).executeUpdate();
+    }
+
+    public List<Book> findByTitleContainingIgnoreCase(String titleLike){
+        if (titleLike == null || titleLike.isEmpty()) {
+            return Collections.emptyList();
+        }
+        else {
+            return bookRepository.findByTitleContainingIgnoreCase(titleLike);
+        }
     }
 
 }

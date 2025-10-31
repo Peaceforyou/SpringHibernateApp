@@ -87,4 +87,15 @@ public class Book {
     public void setOwner(Person owner) {
         this.owner = owner;
     }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                '}';
+    }
+    public String represent(){
+        return this.getTitle() + ", " + this.getAuthor();
+    }
 }

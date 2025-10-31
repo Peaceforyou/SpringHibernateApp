@@ -12,6 +12,7 @@ import ru.sorokin.springcourse.services.BookService;
 import ru.sorokin.springcourse.services.PeopleService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -103,4 +104,19 @@ public class BooksController {
         bookService.assign(id, selectedPerson);
         return "redirect:/books/" + id;
     }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "title", required = false) String title, Model model) {
+        List<Book> bookList;
+        if (title != null){
+            bookList = bookService.findByTitleContainingIgnoreCase(title);
+            model.addAttribute("books",bookList);
+        }
+        else
+            bookList = null;
+        return "books/search";
+    }
+
+
+
 }
