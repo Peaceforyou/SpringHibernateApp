@@ -9,4 +9,5 @@ import ru.sorokin.springcourse.models.Person;
 @Repository
 public interface PeopleRepository extends JpaRepository<Person,Integer> {
     public Person findPersonByBookList(Book book);
+    public Person findPersonByFullName(String fullName);
 }

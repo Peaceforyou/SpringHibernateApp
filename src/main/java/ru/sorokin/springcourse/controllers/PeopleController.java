@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.sorokin.springcourse.models.Person;
 import ru.sorokin.springcourse.services.BookService;
 import ru.sorokin.springcourse.services.PeopleService;
-//import ru.sorokin.springcourse.util.PersonValidator;
+import ru.sorokin.springcourse.util.PersonValidator;
 
 import javax.validation.Valid;
 
@@ -17,12 +17,13 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PeopleController {
 
-//    private final PersonValidator personValidator;
-   private final PeopleService peopleService;
-   private  final BookService bookService;
+    private final PersonValidator personValidator;
+    private final PeopleService peopleService;
+    private  final BookService bookService;
 
     @Autowired
-    public PeopleController(PeopleService peopleService, BookService bookService) {
+    public PeopleController(PersonValidator personValidator, PeopleService peopleService, BookService bookService) {
+        this.personValidator = personValidator;
         this.peopleService = peopleService;
         this.bookService = bookService;
     }
@@ -51,7 +52,7 @@ public class PeopleController {
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) {
-//        personValidator.validate(person, bindingResult);
+        personValidator.validate(person, bindingResult);
 
         if (bindingResult.hasErrors())
             return "people/new";
