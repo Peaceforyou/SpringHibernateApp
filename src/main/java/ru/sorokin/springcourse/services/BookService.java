@@ -13,6 +13,7 @@ import ru.sorokin.springcourse.repositories.BookRepository;
 
 import javax.persistence.EntityManager;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,12 +71,20 @@ public class BookService {
         Session session = em.unwrap(Session.class);
         session.createQuery("update Book b SET b.owner=null where b.id= :bookId")
                 .setParameter("bookId",id).executeUpdate();
+        session.createQuery("update Book b Set b.dateTaken=null where b.id=:bookId")
+               .setParameter("bookId",id).executeUpdate();
     }
     @Transactional
     public void assign(int id,Person selectedPerson){
         Session session = em.unwrap(Session.class);
         session.createQuery("update Book b SET b.owner=:selectedPerson where b.id= :bookId")
                 .setParameter("bookId",id).setParameter("selectedPerson",selectedPerson).executeUpdate();
+
+        Book book = bookRepository.findById(id).orElse(null);
+
+        session.createQuery("update Book b SET b.dateTaken=:DATE where b.id=:bookId")
+                .setParameter("DATE",new Date()).setParameter("bookId",id).executeUpdate();
+
     }
 
     public List<Book> findByTitleContainingIgnoreCase(String titleLike){
@@ -85,6 +94,18 @@ public class BookService {
         else {
             return bookRepository.findByTitleContainingIgnoreCase(titleLike);
         }
+    }
+
+    public boolean isExpired(int id){
+        Book book = bookRepository.findById(id).orElse(null);
+        Date dateNow = new Date();
+        if ((book == null || book.getDateTaken() == null || book.getOwner() == null)){
+            return false;
+        }
+        long diffInMillis = dateNow.getTime() - book.getDateTaken().getTime();
+        long diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
+
+        return (diffInDays > 10);
     }
 
 

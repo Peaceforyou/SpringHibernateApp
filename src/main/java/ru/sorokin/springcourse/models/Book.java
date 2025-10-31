@@ -1,10 +1,12 @@
 package ru.sorokin.springcourse.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
+import java.util.Date;
 
 
 @Entity
@@ -37,6 +39,13 @@ public class Book {
     @JoinColumn(name = "person_id",referencedColumnName = "id")
     Person owner;
 
+    @Column(name = "date_taken")
+    @DateTimeFormat(pattern = "dd:MM::yyyy")
+    @Temporal(TemporalType.DATE)
+    private Date dateTaken;
+
+    @Transient
+    private boolean isExpired;
 
     public Book() {
 
@@ -88,6 +97,16 @@ public class Book {
         this.owner = owner;
     }
 
+    public boolean getIsExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
+    }
+
+
+
     @Override
     public String toString() {
         return "Book{" +
@@ -97,5 +116,13 @@ public class Book {
     }
     public String represent(){
         return this.getTitle() + ", " + this.getAuthor();
+    }
+
+    public Date getDateTaken() {
+        return dateTaken;
+    }
+
+    public void setDateTaken(Date dateTaken) {
+        this.dateTaken = dateTaken;
     }
 }

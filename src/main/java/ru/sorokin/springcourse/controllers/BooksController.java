@@ -62,7 +62,14 @@ public String index(@RequestParam(value = "page", required = false) Integer page
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
-        model.addAttribute("book", bookService.findById(id));
+        Book book1 = bookService.findById(id);
+        if (bookService.isExpired(id)) {
+            book1.setExpired(true);
+            System.out.println("Поставили то что он просрочен в представление");
+
+        }
+
+        model.addAttribute("book", book1);
 
         Book book = new Book();
         book.setId(id);
@@ -70,6 +77,7 @@ public String index(@RequestParam(value = "page", required = false) Integer page
 
         if (bookOwner.isPresent())
             model.addAttribute("owner", bookOwner.get());
+
         else
             model.addAttribute("people", peopleService.findAll());
 

@@ -398,7 +398,7 @@
   <!--                                                                      -->
   <!--  environment-variable- An environment to be set for the execution    -->
   <!--                        environment of the CGI script. The name of    -->
-  <!--                        variable is taken from the parameter name.    -->
+  <!--                        variable is expired from the parameter name.    -->
   <!--                        To configure an environment variable named    -->
   <!--                        FOO, configure a parameter named              -->
   <!--                        environment-variable-FOO. The parameter value -->

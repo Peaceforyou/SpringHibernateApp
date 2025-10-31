@@ -8,12 +8,22 @@
 <body>
 <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
 
-<div th:if="${owner}">
-    <span>Книга сейчас у: </span> <span th:text="${owner.getFullName()}">Person Name</span>
+<!--<div th:if="${owner and book.getIsTaken() == true}">-->
+<!--    <span>Книга сейчас у: </span> <span th:style="'color: red;'" th:text="${owner.getFullName()}">Person Name</span>-->
 
+<div th:if="${owner != null}">
+    <span>Книга сейчас у: </span>
+    <span th:if="${book.getIsExpired() == true}"
+          th:style="'color: red;'"
+          th:text="${owner.getFullName()}">
+    </span>
+    <span th:unless="${book.getIsExpired() == true}"
+          th:text="${owner.getFullName()}">
+    </span>
     <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
         <input type="submit" value="Освободить книгу"/>
     </form>
+</div>
 </div>
 
 <div th:if="${people}">
