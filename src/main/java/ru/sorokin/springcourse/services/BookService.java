@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sorokin.springcourse.models.Book;
@@ -33,6 +34,14 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    public Page<Book> findAll(Pageable book){
+        return bookRepository.findAll(book);
+    }
+
+
+    public List<Book> findAll(Sort field){
+        return bookRepository.findAll(field);
+    }
     public Book findById(int id){
         Optional<Book> book = bookRepository.findById(id);
         return book.orElse(null);
@@ -78,8 +87,5 @@ public class BookService {
         }
     }
 
-    public Page<Book> findAll(Pageable book){
-        return bookRepository.findAll(book);
-    }
 
 }

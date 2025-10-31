@@ -2,6 +2,7 @@ package ru.sorokin.springcourse.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,17 +29,36 @@ public class BooksController {
         this.bookService = bookService;
         this.peopleService = peopleService;
     }
-    
 
-    @GetMapping()
-    public String index(@RequestParam(value = "page",required = false) Integer page ,
-                        @RequestParam(value = "size",required = false) Integer size, Model model) {
-        if (page == null || size == null){
-        model.addAttribute("books", bookService.findAll());}
-        else {
-            model.addAttribute("books", bookService.findAll(PageRequest.of(page,size)));}
-        return "books/index";
+@GetMapping()
+public String index(@RequestParam(value = "page", required = false) Integer page,
+                    @RequestParam(value = "size", required = false) Integer size,
+                    @RequestParam(value = "sort", required = false) String sort,
+                    Model model) {
+
+    if (page == null || size == null) {
+        //Without pagination
+        if (sort != null) {
+            model.addAttribute("books", bookService.findAll(Sort.by(sort)));
+        } else {
+            model.addAttribute("books", bookService.findAll());
+        }
+    } else {
+        //With pagination
+        PageRequest pageRequest;
+        if (sort != null) {
+            pageRequest = PageRequest.of(page, size, Sort.by(sort));
+        } else {
+            pageRequest = PageRequest.of(page, size);
+        }
+
+        List<Book> bookPage = bookService.findAll(pageRequest).getContent();
+        model.addAttribute("books", bookPage);
+
     }
+
+    return "books/index";
+}
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
