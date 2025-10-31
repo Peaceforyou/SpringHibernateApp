@@ -2,6 +2,8 @@ package ru.sorokin.springcourse.services;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sorokin.springcourse.models.Book;
@@ -74,6 +76,10 @@ public class BookService {
         else {
             return bookRepository.findByTitleContainingIgnoreCase(titleLike);
         }
+    }
+
+    public Page<Book> findAll(Pageable book){
+        return bookRepository.findAll(book);
     }
 
 }

@@ -1,6 +1,7 @@
 package ru.sorokin.springcourse.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,16 +28,15 @@ public class BooksController {
         this.bookService = bookService;
         this.peopleService = peopleService;
     }
-
-
-
-
-
-
+    
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", bookService.findAll());
+    public String index(@RequestParam(value = "page",required = false) Integer page ,
+                        @RequestParam(value = "size",required = false) Integer size, Model model) {
+        if (page == null || size == null){
+        model.addAttribute("books", bookService.findAll());}
+        else {
+            model.addAttribute("books", bookService.findAll(PageRequest.of(page,size)));}
         return "books/index";
     }
 
